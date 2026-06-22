@@ -1,0 +1,7 @@
+# Artefacts locaux — jamais versionnés
+*.iso
+*.log
+prepare-key.log
+
+# Copie locale de user-data contenant de vrais identifiants Wi-Fi / mot de passe
+user-data.local
