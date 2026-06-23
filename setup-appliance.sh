@@ -72,7 +72,9 @@ echo "==> 4/4  Demarrage auto du chatbot (fenetre, bureau garde utilisable)"
 sudo tee /usr/local/bin/launch-chatbot.sh >/dev/null <<'EOF'
 #!/usr/bin/env bash
 B="$(command -v chromium-browser || command -v chromium)"
-for _ in $(seq 1 60); do curl -sf http://localhost:8080 >/dev/null && break; sleep 2; done
+# Open WebUI telecharge ~900 Mo (modele embedding) a son 1er demarrage avant de
+# repondre sur :8080 -> on attend jusqu'a ~20 min (surtout en partage 4G).
+for _ in $(seq 1 600); do curl -sf http://localhost:8080 >/dev/null && break; sleep 2; done
 exec "$B" --app=http://localhost:8080
 EOF
 sudo chmod +x /usr/local/bin/launch-chatbot.sh
