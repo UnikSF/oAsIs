@@ -48,14 +48,18 @@ if ! sudo docker ps -a --format '{{.Names}}' | grep -qx open-webui; then
 fi
 
 echo "==> 3/4  Applis optionnelles (n'interrompent PAS le chat IA)"
+# Krita + deps Veikk via apt ; FreeCAD via snap (absent des depots Ubuntu 24.04)
 OPT=()
-[ "$FREECAD" = 1 ] && OPT+=(freecad)
 [ "$KRITA" = 1 ] && OPT+=(krita)
 [ "$VEIKK" = 1 ] && OPT+=(dkms build-essential "linux-headers-$(uname -r)")
 if [ "${#OPT[@]}" -gt 0 ]; then
   for p in "${OPT[@]}"; do
     sudo apt-get install -y "$p" || echo "   (echec '$p' -- on continue)"
   done
+fi
+if [ "$FREECAD" = 1 ]; then
+  echo "   FreeCAD (via snap -- absent des depots Ubuntu 24.04)"
+  sudo snap install freecad || echo "   (FreeCAD non installe -- on continue)"
 fi
 if [ "$VEIKK" = 1 ] && ! dkms status 2>/dev/null | grep -qi veikk; then
   echo "   Pilote tablette Veikk (DKMS)"
